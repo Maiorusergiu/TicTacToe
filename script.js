@@ -25,31 +25,65 @@
 //Each little piece of functionality should be able to fit in the game, player or gameboard objects..
 //but take care to put them in “logical” places. Spending a little time brainstorming here can make your life much easier later!
 
-//5. Think carefully about where each bit of logic should reside.
-//Each little piece of functionality should be able to fit in the game, player or gameboard objects..
-//but take care to put them in “logical” places. Spending a little time brainstorming here can make your life much easier later!
-
 //6. Clean up the interface to allow players to put in their names,
 //include a button to start/restart the game and add a display element that congratulates the winning player!
 
 //Project
 //Fill the cells with X's
+//even = par
+//odd = prim
+    //1 => x
+    //2 => O
+    //3 => x
+    //4 => O
+    //5 => X
+    //6 => O
+    //7 => X
+    //8 => O
+    //9 => X
+    //counter
 
 const Player = (name, marker) => {
     
     return {name, marker};
 };
 
+//create the two players
 const playerOne = Player("PlayerOne", "X");
 const playerTwo = Player("PlayerTwo", "O");
 
-
-let cells = document.querySelectorAll(".cells");
-let answer = document.querySelectorAll(".answer");
-
-for(let i = 0; i < cells.length; i++){
-    let cell = cells[i];
-    cell.addEventListener('click', () => {
-        answer[i].textContent = playerOne.marker;
-    })
+const GameBoard = {
+    gameBoard: ["", "", "", "", "", "", "", "", ""],
+    gameStatus: ["X", "Tie", "O"]
 }
+const populateWithText = (cells, answer, playerTurn) => {
+    let count = 1;
+    for(let i = 0; i < cells.length; i++){
+        let cell = cells[i];
+        cell.addEventListener('click', () => {
+            if(count % 2 !== 0 && GameBoard.gameBoard[i] === ""){
+                count++;
+                playerTurn.textContent = " O ";
+                answer[i].textContent = playerOne.marker;
+                answer[i].classList.add("fade-in");
+                GameBoard.gameBoard[i] = playerOne.marker;
+                console.log(GameBoard.gameBoard);
+            } else if (count % 2 === 0 && GameBoard.gameBoard[i] === ""){
+                count++;
+                playerTurn.textContent = " X ";
+                answer[i].textContent = playerTwo.marker;
+                answer[i].classList.add("fade-in");
+                GameBoard.gameBoard[i] = playerTwo.marker;
+                console.log(GameBoard.gameBoard);
+            } 
+        })
+    }
+}
+const displayController = (() => {
+    const cells = document.querySelectorAll(".cells");
+    const answer = document.querySelectorAll(".answer");
+    const playerTurn = document.querySelector(".player-turn");
+    populateWithText(cells, answer, playerTurn);
+})();
+
+
