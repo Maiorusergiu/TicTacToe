@@ -33,7 +33,7 @@
 .cells:hover {
     background-color: #d7d7da;
 }
-.answer {
+.mark {
     font-size: 70px;
     font-weight: 600;
    
@@ -41,6 +41,24 @@
 .player {
     text-align: center;
     margin-top: 20px;
+}
+.restart-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.restart-button {
+  padding: 10px 20px 10px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    background-color: #d1d1d3;
+    font-size: 20px;
+    visibility: hidden;
+}
+.restart-button:hover {
+  background-color: #ababab;
 }
 
 

@@ -43,47 +43,184 @@
     //9 => X
     //counter
 
-const Player = (name, marker) => {
-    
-    return {name, marker};
+const Player = (name, marker, isWinner) => {
+
+    return {name, marker, isWinner};
 };
 
 //create the two players
-const playerOne = Player("PlayerOne", "X");
-const playerTwo = Player("PlayerTwo", "O");
+const playerOne = Player("PlayerOne", "X", false);
+const playerTwo = Player("PlayerTwo", "O", false);
 
 const GameBoard = {
     gameBoard: ["", "", "", "", "", "", "", "", ""],
-    gameStatus: ["X", "Tie", "O"]
+    existsWinner: Boolean(false),
+    itsTie: Boolean(false),
 }
-const populateWithText = (cells, answer, playerTurn) => {
+const displayWinner = (result) => {
+    if(playerOne.isWinner){
+        result.textContent = "Player X wins!";
+    } else if(playerTwo.isWinner){
+        result.textContent = "Player O wins!";
+    } else if(!playerOne.isWinner && !playerTwo.isWinner && GameBoard.itsTie){
+        result.textContent = "It's a tie!";
+    }
+}
+const displayRestartButton = () => {
+    const restartButton = document.querySelector(".restart-button");
+
+}
+const gameOver = (result) => {
+    const cellPosition = GameBoard.gameBoard;
+    
+    //upper horizontal
+    if(cellPosition[0] === playerOne.marker && cellPosition[1] === playerOne.marker && cellPosition[2] === playerOne.marker){
+        console.log("X Wins");
+        playerOne.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } 
+    else if(cellPosition[0] === playerTwo.marker && cellPosition[1] === playerTwo.marker && cellPosition[2] === playerTwo.marker)
+    {
+        console.log("O Wins");
+        playerTwo.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    }  //vertical right
+    else if(cellPosition[2] === playerOne.marker && cellPosition[5] === playerOne.marker && cellPosition[8] === playerOne.marker){
+        console.log("X Wins");
+        playerOne.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } 
+    else if(cellPosition[2] === playerTwo.marker && cellPosition[5] === playerTwo.marker && cellPosition[8] === playerTwo.marker)
+    {
+        console.log("O Wins");
+        playerTwo.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    }//down horizontal 
+    else if(cellPosition[6] === playerOne.marker && cellPosition[7] === playerOne.marker && cellPosition[8] === playerOne.marker){
+        console.log("X Wins");
+        playerOne.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } 
+    else if(cellPosition[6] === playerTwo.marker && cellPosition[7] === playerTwo.marker && cellPosition[8] === playerTwo.marker)
+    {
+        console.log("O Wins");
+        playerTwo.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } //vertical left
+    else if(cellPosition[0] === playerOne.marker && cellPosition[3] === playerOne.marker && cellPosition[6] === playerOne.marker){
+        console.log("X Wins");
+        playerOne.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } 
+    else if(cellPosition[0] === playerTwo.marker && cellPosition[3] === playerTwo.marker && cellPosition[6] === playerTwo.marker)
+    {
+        console.log("O Wins");
+        playerTwo.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } //middle
+    else if(cellPosition[3] === playerOne.marker && cellPosition[4] === playerOne.marker && cellPosition[5] === playerOne.marker){
+        console.log("X Wins");
+        playerOne.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } 
+    else if(cellPosition[3] === playerTwo.marker && cellPosition[4] === playerTwo.marker && cellPosition[5] === playerTwo.marker)
+    {
+        console.log("O Wins");
+        playerTwo.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } //diag left to right
+    else if(cellPosition[0] === playerOne.marker && cellPosition[4] === playerOne.marker && cellPosition[8] === playerOne.marker){
+        console.log("X Wins");
+        playerOne.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } 
+    else if(cellPosition[0] === playerTwo.marker && cellPosition[4] === playerTwo.marker && cellPosition[8] === playerTwo.marker)
+    {
+        console.log("O Wins");
+        playerTwo.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } //diag right to left
+    else if(cellPosition[2] === playerOne.marker && cellPosition[4] === playerOne.marker && cellPosition[6] === playerOne.marker){
+        console.log("X Wins");
+        playerOne.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } 
+    else if(cellPosition[2] === playerTwo.marker && cellPosition[4] === playerTwo.marker && cellPosition[6] === playerTwo.marker)
+    {
+        console.log("O Wins");
+        playerTwo.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } //vertical middle
+    else if(cellPosition[1] === playerOne.marker && cellPosition[4] === playerOne.marker && cellPosition[7] === playerOne.marker){
+        console.log("X Wins");
+        playerOne.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    } 
+    else if(cellPosition[1] === playerTwo.marker && cellPosition[4] === playerTwo.marker && cellPosition[7] === playerTwo.marker)
+    {
+        console.log("O Wins");
+        playerTwo.isWinner = true;
+        GameBoard.existsWinner = true;
+        displayWinner(result);
+    }
+    else if(cellPosition[1] !== ""
+    && cellPosition[2] !== "" && cellPosition[3] !== "" && cellPosition[4] !== ""
+    && cellPosition[5] !== "" && cellPosition[6] !== "" && cellPosition[7] !== ""
+    && cellPosition[8] !== "" && !GameBoard.existsWinner){
+        GameBoard.itsTie = true;
+        displayWinner(result);
+    }
+}
+const playGame = (cells, mark, playerTurn) => {
     let count = 1;
     for(let i = 0; i < cells.length; i++){
         let cell = cells[i];
+        
         cell.addEventListener('click', () => {
+        if(!GameBoard.existsWinner){
             if(count % 2 !== 0 && GameBoard.gameBoard[i] === ""){
                 count++;
-                playerTurn.textContent = " O ";
-                answer[i].textContent = playerOne.marker;
-                answer[i].classList.add("fade-in");
+                playerTurn.textContent = "Player's O turn!";
+                mark[i].textContent = playerOne.marker;
+                mark[i].classList.add("fade-in");
                 GameBoard.gameBoard[i] = playerOne.marker;
                 console.log(GameBoard.gameBoard);
+                gameOver(playerTurn);
             } else if (count % 2 === 0 && GameBoard.gameBoard[i] === ""){
                 count++;
-                playerTurn.textContent = " X ";
-                answer[i].textContent = playerTwo.marker;
-                answer[i].classList.add("fade-in");
+                playerTurn.textContent = "Player's X turn!";
+                mark[i].textContent = playerTwo.marker;
+                mark[i].classList.add("fade-in");
                 GameBoard.gameBoard[i] = playerTwo.marker;
                 console.log(GameBoard.gameBoard);
+                gameOver(playerTurn);
             } 
+        }
         })
     }
 }
+
 const displayController = (() => {
     const cells = document.querySelectorAll(".cells");
-    const answer = document.querySelectorAll(".answer");
-    const playerTurn = document.querySelector(".player-turn");
-    populateWithText(cells, answer, playerTurn);
+    const mark = document.querySelectorAll(".mark");
+    const playerTurn = document.querySelector(".player");
+    playGame(cells, mark, playerTurn);
+   
 })();
 
 
