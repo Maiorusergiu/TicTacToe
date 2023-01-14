@@ -46,7 +46,7 @@
 //Input for players
 //Update players names
 //AI
-let countPlayerTurn = 1; //global variable for tracking the players turn
+ //global variable for tracking the players turn
 const Player = (name, marker, isWinner) => {
 
     return {name, marker, isWinner};
@@ -88,6 +88,7 @@ const GameBoard = {
     itsTie: Boolean(false),
     playerVsPlayer: Boolean(false),
     playerVsAi: Boolean(false),
+    countPlayerTurn: 1,
 }
 const displayWinner = (result) => {
     if(playerOne.isWinner){
@@ -258,7 +259,7 @@ const restartGame = (cells, mark, playerTurn) => {
             mark[i].textContent = "";
             
         }
-        countPlayerTurn = 1;
+        GameBoard.countPlayerTurn = 1;
         
     })
 }
@@ -269,16 +270,16 @@ const playGame = (cells, mark, playerTurn) => {
         restartGame(cells, mark, playerTurn);
         cell.addEventListener('click', () => {
         if(!GameBoard.existsWinner && !!GameBoard.playerVsPlayer){
-            if(countPlayerTurn % 2 !== 0 && GameBoard.gameBoard[i] === ""){
-                countPlayerTurn++;
+            if(GameBoard.countPlayerTurn % 2 !== 0 && GameBoard.gameBoard[i] === ""){
+                GameBoard.countPlayerTurn++;
                 playerTurn.textContent = "Player's O turn!"; //after click change text
                 mark[i].textContent = playerOne.marker; //mark with x
                 mark[i].classList.add("fade-in"); //add fade-in
                 GameBoard.gameBoard[i] = playerOne.marker; //add x to the game flow
                 console.log(GameBoard.gameBoard);
                 gameOver(playerTurn); //check if the game is over
-            } else if (countPlayerTurn % 2 === 0 && GameBoard.gameBoard[i] === ""){
-                countPlayerTurn++;
+            } else if (GameBoard.countPlayerTurn % 2 === 0 && GameBoard.gameBoard[i] === ""){
+                GameBoard.countPlayerTurn++;
                 playerTurn.textContent = "Player's X turn!"; //after click change text
                 mark[i].textContent = playerTwo.marker; //mark with O
                 mark[i].classList.add("fade-in"); //add fade-in
