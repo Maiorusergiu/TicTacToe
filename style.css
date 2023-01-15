@@ -170,12 +170,18 @@
     body{
       height: 100vh;
     }
+ 
   }
 
 
   .name-inputs {
     display: flex;
     gap: 180px;
+  }
+  @media only screen and (max-width: 700px) {
+    .name-inputs {
+      display: block;
+      }
   }
   form {
     text-align: -webkit-center;
