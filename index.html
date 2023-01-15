@@ -12,7 +12,7 @@
         <h1 class="title">
             Tic Tac Toe
         </h1>
-        <h3 class="player">Player's X turn!</h3>
+        <h3 class="player"></h3>
         <div class="main">
             <div class="cell-1 cells">
                 <p class="mark"></p>
@@ -51,6 +51,22 @@
         <button class="start-game">Start Game!</button>
         <button class="player-player">Player vs Player</button>
         <button class="player-ai">Player vs AI</button>
+        
+            <form class="form">
+                <div class="name-inputs">
+                    <div class="name-one">
+                        <label class="label-name-one" for="name">Enter player one name</label>
+                        <input type="text" class="player-one-name">
+                    </div>
+                    <div class="name-two">
+                        <label class="label-name-two" for="name">Enter player one name</label>
+                        <input type="text" class="player-two-name">
+                    </div>
+                </div>
+                <button class="submit-names" onclick="inputPlayerNames()" type="submit">Submit names</button>
+            </form>
+            
+        </div>
     </div>
     
     <script src="script.js"></script>

@@ -63,10 +63,22 @@ const startGame = (() => {
     const playerVersusPlayer = document.querySelector(".player-player");
     const playerVersusAi = document.querySelector(".player-ai");
     const container = document.querySelector('.container');
+    const playerOneName = document.querySelector('.player-one-name');
+    const playerTwoName = document.querySelector('.player-two-name');
+    const submitButton = document.querySelector('.submit-names');
+    const labelOne = document.querySelector(".label-name-one");
+    const labelTwo = document.querySelector(".label-name-two");
     container.style.display = "none";
     playerVersusPlayer.style.display = "none";
     playerVersusAi.style.display = "none";
+    playerOneName.style.display = "none";
+    playerTwoName.style.display = "none";
+    submitButton.style.display = "none";
+    labelOne.style.display = "none";
+    labelTwo.style.display = "none";
+    
     startGameButton.addEventListener("click", () => {
+       
         startGameButton.style.display = "none";
         
         playerVersusPlayer.style.display = "block";
@@ -77,10 +89,46 @@ const startGame = (() => {
         playerVersusPlayer.style.display = "none";
         playerVersusAi.style.display = "none";
         GameBoard.playerVsPlayer = true;
-        container.style.display = "block";
+        // container.style.display = "block";
+        inputPlayerNames();
+       
     })
+ 
 
 })();
+
+const inputPlayerNames = () => {
+    const playerOneName = document.querySelector('.player-one-name');
+    const playerTwoName = document.querySelector('.player-two-name');
+    const submitButton = document.querySelector('.submit-names');
+    const form = document.querySelector("form");
+    const container = document.querySelector(".container");
+    const labelOne = document.querySelector(".label-name-one");
+    const labelTwo = document.querySelector(".label-name-two");
+    playerOneName.style.display = "block";
+    playerTwoName.style.display = "block";
+    submitButton.style.display = "block";
+    labelOne.style.display = "block"
+    labelTwo.style.display = "block";
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        playerOne.name = playerOneName.value;
+        playerTwo.name = playerTwoName.value;
+        playerOneName.style.display = "none";
+        playerTwoName.style.display = "none";
+        submitButton.style.display = "none";
+        labelOne.style.display = "none";
+        labelTwo.style.display = "none";
+        container.style.display = "block";
+        //set the first text
+        const player = document.querySelector('.player');
+        player.textContent = `Player ${playerOne.name} turn with mark X!`;
+       
+    })
+    
+    
+   
+};
 
 const GameBoard = {
     gameBoard: ["", "", "", "", "", "", "", "", ""],
@@ -92,9 +140,9 @@ const GameBoard = {
 }
 const displayWinner = (result) => {
     if(playerOne.isWinner){
-        result.textContent = "Player X wins!";
+        result.textContent = `Congatulations! Player ${playerOne.name} wins!`;
     } else if(playerTwo.isWinner){
-        result.textContent = "Player O wins!";
+        result.textContent = `Congatulations! Player ${playerTwo.name} wins!`;
     } else if(!playerOne.isWinner && !playerTwo.isWinner && GameBoard.itsTie){
         result.textContent = "It's a tie!";
     } 
@@ -254,7 +302,7 @@ const restartGame = (cells, mark, playerTurn) => {
         playerOne.isWinner = false;
         playerTwo.isWinner = false;
         restartButton.style.visibility = "hidden";
-        playerTurn.textContent = "Player's X turn!";
+        playerTurn.textContent = `Player ${playerOne.name} turn with mark X!`;
         for(let i = 0 ; i < cells.length; i++){
             mark[i].textContent = "";
             
@@ -269,10 +317,10 @@ const playGame = (cells, mark, playerTurn) => {
         let cell = cells[i];
         restartGame(cells, mark, playerTurn);
         cell.addEventListener('click', () => {
-        if(!GameBoard.existsWinner && !!GameBoard.playerVsPlayer){
+        if(!GameBoard.existsWinner && GameBoard.playerVsPlayer){
             if(GameBoard.countPlayerTurn % 2 !== 0 && GameBoard.gameBoard[i] === ""){
                 GameBoard.countPlayerTurn++;
-                playerTurn.textContent = "Player's O turn!"; //after click change text
+                playerTurn.textContent = `Player ${playerTwo.name} turn with mark O!`; //after click change text
                 mark[i].textContent = playerOne.marker; //mark with x
                 mark[i].classList.add("fade-in"); //add fade-in
                 GameBoard.gameBoard[i] = playerOne.marker; //add x to the game flow
@@ -280,7 +328,7 @@ const playGame = (cells, mark, playerTurn) => {
                 gameOver(playerTurn); //check if the game is over
             } else if (GameBoard.countPlayerTurn % 2 === 0 && GameBoard.gameBoard[i] === ""){
                 GameBoard.countPlayerTurn++;
-                playerTurn.textContent = "Player's X turn!"; //after click change text
+                playerTurn.textContent = `Player ${playerOne.name} turn with mark X!`; //after click change text
                 mark[i].textContent = playerTwo.marker; //mark with O
                 mark[i].classList.add("fade-in"); //add fade-in
                 GameBoard.gameBoard[i] = playerTwo.marker; //add o to array

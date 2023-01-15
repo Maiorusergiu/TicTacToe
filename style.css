@@ -87,7 +87,7 @@
     margin-left: 10px;
     margin-right: 10px;
 }
-.player-player:hover, .player-ai:hover {
+.player-player:hover, .player-ai:hover, .submit-names:hover {
   background-color: #ababab;
 }
 
@@ -172,3 +172,30 @@
     }
   }
 
+
+  .name-inputs {
+    display: flex;
+    gap: 180px;
+  }
+  form {
+    text-align: -webkit-center;
+  }
+  .submit-names {
+    margin-top: 60px;
+    padding: 5px 10px 5px 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    background-color: #d1d1d3;
+    font-size: 17px;
+  }
+  .label-name-one, .label-name-two {
+    text-align: initial;
+    margin-bottom: 2px;
+  }
+  input {
+    outline: none;
+    border-style: 1px solid #ababab;
+    border-radius: 10px;
+  }
