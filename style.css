@@ -163,5 +163,12 @@
       grid-template-rows: 100px 100px 90px;
       grid-gap: 5px;
     }
+    .start-game-container {
+      height: 100vh;
+      margin: 0;
+    }
+    body{
+      height: 100vh;
+    }
   }
 
