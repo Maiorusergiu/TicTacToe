@@ -47,7 +47,7 @@
 //Update players names
 //AI
  //global variable for tracking the players turn
-const Player = (name, marker, isWinner) => {
+ const Player = (name, marker, isWinner) => {
 
     return {name, marker, isWinner};
 };
@@ -112,7 +112,7 @@ const startGame = (() => {
         playerVersusAi.style.display = "none";
         GameBoard.playerVsAi = true;
         container.style.display = "block";
-        playGame(cells, mark, playerTurn);
+       // playGame(cells, mark, playerTurn);
         //set first text
        
         player.textContent = "Make your best move with mark X!";
@@ -336,7 +336,7 @@ const restartGame = (cells, mark, playerTurn) => {
     const restartButton = document.querySelector(".restart-button");
     
     restartButton.addEventListener('click', () => {
-        if(GameBoard.playerVsPlayer){
+      
         GameBoard.existsWinner = false;
         GameBoard.itsTie = false;
         GameBoard.gameBoard = ["", "", "", "", "", "", "", "", ""];
@@ -349,20 +349,6 @@ const restartGame = (cells, mark, playerTurn) => {
             
         }
         GameBoard.countPlayerTurn = 1;
-    } else if (GameBoard.playerVsAi){
-        GameBoard.existsWinner = false;
-        GameBoard.itsTie = false;
-        GameBoard.gameBoard = ["", "", "", "", "", "", "", "", ""];
-        playerOne.isWinner = false;
-        playerTwo.isWinner = false;
-        restartButton.style.visibility = "hidden";
-        playerTurn.textContent = `Make your best move with mark X!`;
-        for(let i = 0 ; i < cells.length; i++){
-            mark[i].textContent = "";
-            
-        }
-        GameBoard.countPlayerTurn = 1;
-    }
         
         
     })
@@ -402,8 +388,9 @@ const playGame = (cells, mark, playerTurn) => {
     restartGame(cells, mark, playerTurn);
     for(let i = 0; i < cells.length; i++){
         let cell = cells[i];
-        if(!GameBoard.existsWinner && GameBoard.playerVsPlayer && !GameBoard.playerVsAi){
+        
         cell.addEventListener('click', () => {
+            if(GameBoard.playerVsPlayer && !GameBoard.existsWinner){
             if(GameBoard.countPlayerTurn % 2 !== 0 && GameBoard.gameBoard[i] === ""){
                 GameBoard.countPlayerTurn++;
                 playerTurn.textContent = `Player ${playerTwo.name} turn with mark O!`; //after click change text
@@ -421,13 +408,12 @@ const playGame = (cells, mark, playerTurn) => {
                 console.log(GameBoard.gameBoard);
                 gameOver(playerTurn); //check if the game is over
             } 
+        } else if(!GameBoard.playerVsPlayer && !GameBoard.existsWinner && GameBoard.playerVsAi){
+            console.log("Clicked");
+            //aici continuam
+            //idee: facem alta functie playSinglePlayer
+        }
         })
-    } else if(!GameBoard.existsWinner && !GameBoard.playerVsPlayer && GameBoard.playerVsAi){
-        cell.addEventListener("click", () => {
-            console.log("clicked");
-        })
-    }
-    
 }
 } 
 
