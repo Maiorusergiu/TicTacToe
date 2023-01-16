@@ -56,6 +56,9 @@ const Player = (name, marker, isWinner) => {
 const playerOne = Player("PlayerOne", "X", false);
 const playerTwo = Player("PlayerTwo", "O", false);
 
+const singePlayer = Player("SinglePlayerName", "X", false);
+const robot = Player("Robot", "O", false);
+
 
 
 const startGame = (() => {
@@ -68,6 +71,7 @@ const startGame = (() => {
     const submitButton = document.querySelector('.submit-names');
     const labelOne = document.querySelector(".label-name-one");
     const labelTwo = document.querySelector(".label-name-two");
+    const goBackButton = document.querySelector('.go-back');
     container.style.display = "none";
     playerVersusPlayer.style.display = "none";
     playerVersusAi.style.display = "none";
@@ -76,6 +80,12 @@ const startGame = (() => {
     submitButton.style.display = "none";
     labelOne.style.display = "none";
     labelTwo.style.display = "none";
+    goBackButton.style.display = "none";
+
+    const cells = document.querySelectorAll(".cells");
+    const mark = document.querySelectorAll(".mark");
+    const playerTurn = document.querySelector(".player");
+    
     
     startGameButton.addEventListener("click", () => {
        
@@ -90,8 +100,22 @@ const startGame = (() => {
         playerVersusAi.style.display = "none";
         GameBoard.playerVsPlayer = true;
         // container.style.display = "block";
+        playGame(cells, mark, playerTurn);
         inputPlayerNames();
        
+    })
+    playerVersusAi.addEventListener('click', () => {
+        const player = document.querySelector(".player");
+        const goBackButton = document.querySelector(".go-back");
+        goBackButton.style.display = "block";
+        playerVersusPlayer.style.display = "none";
+        playerVersusAi.style.display = "none";
+        GameBoard.playerVsAi = true;
+        container.style.display = "block";
+        playGame(cells, mark, playerTurn);
+        //set first text
+       
+        player.textContent = "Make your best move with mark X!";
     })
  
 
@@ -105,13 +129,18 @@ const inputPlayerNames = () => {
     const container = document.querySelector(".container");
     const labelOne = document.querySelector(".label-name-one");
     const labelTwo = document.querySelector(".label-name-two");
+    const goBackButton = document.querySelector('.go-back');
+    const player = document.querySelector('.player');
     playerOneName.style.display = "block";
     playerTwoName.style.display = "block";
     submitButton.style.display = "block";
     labelOne.style.display = "block"
     labelTwo.style.display = "block";
+   
+
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+        e.stopImmediatePropagation();
         playerOne.name = playerOneName.value;
         playerTwo.name = playerTwoName.value;
         playerOneName.style.display = "none";
@@ -120,15 +149,15 @@ const inputPlayerNames = () => {
         labelOne.style.display = "none";
         labelTwo.style.display = "none";
         container.style.display = "block";
+        goBackButton.style.display = "block";
         //set the first text
-        const player = document.querySelector('.player');
         player.textContent = `Player ${playerOne.name} turn with mark X!`;
-       
+        form.reset();
+        
     })
-    
-    
-   
 };
+
+
 
 const GameBoard = {
     gameBoard: ["", "", "", "", "", "", "", "", ""],
@@ -139,6 +168,7 @@ const GameBoard = {
     countPlayerTurn: 1,
 }
 const displayWinner = (result) => {
+    if(GameBoard.playerVsPlayer){
     if(playerOne.isWinner){
         result.textContent = `Congatulations! Player ${playerOne.name} wins!`;
     } else if(playerTwo.isWinner){
@@ -146,6 +176,15 @@ const displayWinner = (result) => {
     } else if(!playerOne.isWinner && !playerTwo.isWinner && GameBoard.itsTie){
         result.textContent = "It's a tie!";
     } 
+} else if(GameBoard.playerVsAi){
+    if(playerOne.isWinner){
+        result.textContent = `Congatulations! You beat AI!`;
+    } else if(playerTwo.isWinner){
+        result.textContent = `AI wins!`;
+    } else if(!playerOne.isWinner && !playerTwo.isWinner && GameBoard.itsTie){
+        result.textContent = "It's a tie!";
+    } 
+}
 }
 const displayRestartButton = () => {
     const restartButton = document.querySelector(".restart-button");
@@ -295,7 +334,9 @@ const gameOver = (result) => {
 
 const restartGame = (cells, mark, playerTurn) => {
     const restartButton = document.querySelector(".restart-button");
+    
     restartButton.addEventListener('click', () => {
+        if(GameBoard.playerVsPlayer){
         GameBoard.existsWinner = false;
         GameBoard.itsTie = false;
         GameBoard.gameBoard = ["", "", "", "", "", "", "", "", ""];
@@ -308,16 +349,61 @@ const restartGame = (cells, mark, playerTurn) => {
             
         }
         GameBoard.countPlayerTurn = 1;
+    } else if (GameBoard.playerVsAi){
+        GameBoard.existsWinner = false;
+        GameBoard.itsTie = false;
+        GameBoard.gameBoard = ["", "", "", "", "", "", "", "", ""];
+        playerOne.isWinner = false;
+        playerTwo.isWinner = false;
+        restartButton.style.visibility = "hidden";
+        playerTurn.textContent = `Make your best move with mark X!`;
+        for(let i = 0 ; i < cells.length; i++){
+            mark[i].textContent = "";
+            
+        }
+        GameBoard.countPlayerTurn = 1;
+    }
+        
+        
+    })
+}
+const goBack = (cells, mark) => {
+    const goBackButton = document.querySelector(".go-back");
+    const restartButton = document.querySelector(".restart-button");
+    goBackButton.addEventListener('click', () => {
+        const container = document.querySelector('.container');
+        const startGameButton = document.querySelector(".start-game");
+
+        container.style.display = "none";
+        startGameButton.style.display = "block";
+        goBackButton.style.display = "none";
+
+        GameBoard.existsWinner = false;
+        GameBoard.itsTie = false;
+        GameBoard.gameBoard = ["", "", "", "", "", "", "", "", ""];
+        playerOne.isWinner = false;
+        playerTwo.isWinner = false;
+        restartButton.style.visibility = "hidden";
+        for(let i = 0 ; i < cells.length; i++){
+            mark[i].textContent = "";
+            
+        }
+        GameBoard.countPlayerTurn = 1;
+        GameBoard.playerVsPlayer = false;
+        GameBoard.playerVsAi = false;
+     
         
     })
 }
 
+
 const playGame = (cells, mark, playerTurn) => {
+    goBack(cells, mark);
+    restartGame(cells, mark, playerTurn);
     for(let i = 0; i < cells.length; i++){
         let cell = cells[i];
-        restartGame(cells, mark, playerTurn);
+        if(!GameBoard.existsWinner && GameBoard.playerVsPlayer && !GameBoard.playerVsAi){
         cell.addEventListener('click', () => {
-        if(!GameBoard.existsWinner && GameBoard.playerVsPlayer){
             if(GameBoard.countPlayerTurn % 2 !== 0 && GameBoard.gameBoard[i] === ""){
                 GameBoard.countPlayerTurn++;
                 playerTurn.textContent = `Player ${playerTwo.name} turn with mark O!`; //after click change text
@@ -335,18 +421,41 @@ const playGame = (cells, mark, playerTurn) => {
                 console.log(GameBoard.gameBoard);
                 gameOver(playerTurn); //check if the game is over
             } 
-        }
+        })
+    } else if(!GameBoard.existsWinner && !GameBoard.playerVsPlayer && GameBoard.playerVsAi){
+        cell.addEventListener("click", () => {
+            console.log("clicked");
         })
     }
-}
-
-const displayController = (() => {
-    const cells = document.querySelectorAll(".cells");
-    const mark = document.querySelectorAll(".mark");
-    const playerTurn = document.querySelector(".player");
-    playGame(cells, mark, playerTurn);
     
-   
-})();
+}
+} 
 
 
+
+//Next tasks
+//Verify in gameOver if the game is singlePlayer
+//Make the robot choose a place
+
+
+// else if(!GameBoard.existsWinner && GameBoard.playerVsAi && !GameBoard.playerVsPlayer){
+           
+        //     if(GameBoard.countPlayerTurn % 2 !== 0 && GameBoard.gameBoard[i] === ""){
+        //         GameBoard.countPlayerTurn++;
+        //         playerTurn.textContent = `Robot's turn with mark O!`;
+        //        //after click change text
+        //         mark[i].textContent = playerOne.marker; //mark with x
+        //         mark[i].classList.add("fade-in"); //add fade-in
+        //         GameBoard.gameBoard[i] = playerOne.marker; //add x to the game flow
+        //         console.log(GameBoard.gameBoard);
+        //         gameOver(playerTurn); //check if the game is over
+        //     } else if (GameBoard.countPlayerTurn % 2 === 0 && GameBoard.gameBoard[i] === ""){
+        //         GameBoard.countPlayerTurn++;
+        //         playerTurn.textContent = `Make your best move with mark X!`; //after click change text
+        //         mark[i].textContent = playerTwo.marker; //mark with O
+        //         mark[i].classList.add("fade-in"); //add fade-in
+        //         GameBoard.gameBoard[i] = playerTwo.marker; //add o to array
+        //         console.log(GameBoard.gameBoard);
+        //         gameOver(playerTurn); //check if the game is over
+        //     } 
+        // }

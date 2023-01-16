@@ -44,8 +44,8 @@
 }
 .restart-container {
   display: flex;
-  justify-content: center;
   margin-top: 20px;
+  justify-content: space-around;
 }
 .restart-button {
     padding: 10px 20px 10px 20px;
@@ -57,6 +57,15 @@
     font-size: 20px;
     visibility: hidden;
 }
+.go-back {
+  padding: 10px 20px 10px 20px;
+  cursor: pointer;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  background-color: #d1d1d3;
+  font-size: 20px;
+}
 .start-game {
     padding: 10px 20px 10px 20px;
     cursor: pointer;
@@ -67,7 +76,7 @@
     font-size: 20px;
   
 }
-.start-game:hover {
+.start-game:hover, .go-back:hover {
   background-color: #ababab;
 }
 .start-game-container {
@@ -199,9 +208,14 @@
   .label-name-one, .label-name-two {
     text-align: initial;
     margin-bottom: 2px;
+    font-size: 20px;
   }
   input {
     outline: none;
     border-style: 1px solid #ababab;
     border-radius: 10px;
+    font-size: 19px;
+  }
+  .player-one-name, .player-two-name {
+    padding: 5px;
   }
