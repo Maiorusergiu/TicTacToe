@@ -114,6 +114,7 @@ const startGame = (() => {
         container.style.display = "block";
        // playGame(cells, mark, playerTurn);
         //set first text
+        playGame(cells, mark, playerTurn);
        
         player.textContent = "Make your best move with mark X!";
     })
@@ -343,9 +344,14 @@ const restartGame = (cells, mark, playerTurn) => {
         playerOne.isWinner = false;
         playerTwo.isWinner = false;
         restartButton.style.visibility = "hidden";
+        if(GameBoard.playerVsPlayer){
         playerTurn.textContent = `Player ${playerOne.name} turn with mark X!`;
+        } else if(GameBoard.playerVsAi){
+            playerTurn.textContent = `Make your best move with mark X!`;
+        }
         for(let i = 0 ; i < cells.length; i++){
             mark[i].textContent = "";
+            mark[i].classList.remove("fade-in");
             
         }
         GameBoard.countPlayerTurn = 1;
@@ -372,6 +378,7 @@ const goBack = (cells, mark) => {
         restartButton.style.visibility = "hidden";
         for(let i = 0 ; i < cells.length; i++){
             mark[i].textContent = "";
+            mark[i].classList.remove("fade-in")
             
         }
         GameBoard.countPlayerTurn = 1;
@@ -390,7 +397,7 @@ const playGame = (cells, mark, playerTurn) => {
         let cell = cells[i];
         
         cell.addEventListener('click', () => {
-            if(GameBoard.playerVsPlayer && !GameBoard.existsWinner){
+            if(GameBoard.playerVsPlayer && !GameBoard.existsWinner && !GameBoard.playerVsAi){
             if(GameBoard.countPlayerTurn % 2 !== 0 && GameBoard.gameBoard[i] === ""){
                 GameBoard.countPlayerTurn++;
                 playerTurn.textContent = `Player ${playerTwo.name} turn with mark O!`; //after click change text
@@ -408,10 +415,25 @@ const playGame = (cells, mark, playerTurn) => {
                 console.log(GameBoard.gameBoard);
                 gameOver(playerTurn); //check if the game is over
             } 
-        } else if(!GameBoard.playerVsPlayer && !GameBoard.existsWinner && GameBoard.playerVsAi){
-            console.log("Clicked");
-            //aici continuam
-            //idee: facem alta functie playSinglePlayer
+        } else if (!GameBoard.playerVsPlayer && !GameBoard.existsWinner && GameBoard.playerVsAi){
+            let random = Math.floor(Math.random() * 8) + 1;
+            if(GameBoard.gameBoard[i] === ""){
+                mark[i].classList.add("fade-in");
+                mark[i].textContent = playerOne.marker;
+                GameBoard.gameBoard[i] = playerOne.marker
+
+                let emptyPosition = GameBoard.gameBoard.findIndex(x => x === ""); //find first empty spot
+                    if(emptyPosition !== -1 && !GameBoard.existsWinner){
+                    mark[emptyPosition].classList.add("fade-in");
+                    mark[emptyPosition].textContent = playerTwo.marker;
+                    GameBoard.gameBoard[emptyPosition] = playerTwo.marker
+                }
+                gameOver(playerTurn);
+               
+                
+            }
+               
+           
         }
         })
 }
