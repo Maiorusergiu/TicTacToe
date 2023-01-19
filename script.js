@@ -47,19 +47,66 @@
 //Update players names
 //AI
  //global variable for tracking the players turn
- const Player = (name, marker, isWinner) => {
+ const Player = (name, marker, isWinner, score) => {
 
-    return {name, marker, isWinner};
+    return {name, marker, isWinner, score};
 };
 
 //create the two players
-const playerOne = Player("PlayerOne", "X", false);
-const playerTwo = Player("PlayerTwo", "O", false);
+const playerOne = Player("PlayerOne", "X", false, 0);
+const playerTwo = Player("PlayerTwo", "O", false, 0);
 
-const singePlayer = Player("SinglePlayerName", "X", false);
-const robot = Player("Robot", "O", false);
+//helper functions
+const addFadeIn = (element) => {
+    element.classList.add("fade-in");
+}
+const removeFadeIn = (element) => {
+    element.classList.remove("fade-in");
+}
+const hide = (element) => {
+    element.style.display = "none";
+}
+const displayBlock = (element) => {
+    element.style.display = "block";
+}
 
+const incrementAndDisplayScore = () => {
+    const playerOneNameAndScore = document.querySelector(".player-one-score");
+    const playerTwoNameAndScore = document.querySelector(".player-two-score");
+    if(playerOne.isWinner){
+    playerOne.score++;
+    playerOneNameAndScore.textContent = `${playerOne.name}: ${playerOne.score}`;
+    } else if(playerTwo.isWinner){
+        playerTwo.score++;
+        playerTwoNameAndScore.textContent = `${playerTwo.name}: ${playerTwo.score}`;
+    }
+}
+const displayScoreAndName = () => {
+    const playerOneNameAndScore = document.querySelector(".player-one-score");
+    const playerTwoNameAndScore = document.querySelector(".player-two-score");
+    const robotIcon = `<i class="bi bi-robot"></i>`;
+    const personIcon = `<i class="bi bi-people-fill"></i>`;
+    if(GameBoard.playerVsAi) {
+        playerOne.name = "You";
+        playerTwo.name = "Robot";
+    }
+    playerOneNameAndScore.innerHTML = `${personIcon}${playerOne.name}: ${playerOne.score}`;
+    playerTwoNameAndScore.innerHTML = `${robotIcon}${playerTwo.name}: ${playerTwo.score}`;
+}
 
+const setGameToStart = (cells, mark) => {
+    GameBoard.existsWinner = false;
+    GameBoard.itsTie = false;
+    GameBoard.gameBoard = ["", "", "", "", "", "", "", "", ""];
+    GameBoard.countPlayerTurn = 1;
+    for(let i = 0 ; i < cells.length; i++){
+        mark[i].textContent = "";
+        removeFadeIn(mark[i]);
+        
+    }
+    playerOne.isWinner = false;
+    playerTwo.isWinner = false;
+}
 
 const startGame = (() => {
     const startGameButton = document.querySelector(".start-game");
@@ -72,15 +119,17 @@ const startGame = (() => {
     const labelOne = document.querySelector(".label-name-one");
     const labelTwo = document.querySelector(".label-name-two");
     const goBackButton = document.querySelector('.go-back');
-    container.style.display = "none";
-    playerVersusPlayer.style.display = "none";
-    playerVersusAi.style.display = "none";
-    playerOneName.style.display = "none";
-    playerTwoName.style.display = "none";
-    submitButton.style.display = "none";
-    labelOne.style.display = "none";
-    labelTwo.style.display = "none";
-    goBackButton.style.display = "none";
+   
+    hide(container);
+    hide(playerVersusPlayer);
+    hide(playerVersusAi);
+    hide(playerOneName);
+    hide(playerTwoName);
+    hide(submitButton);
+    hide(labelOne);
+    hide(labelTwo);
+    hide(goBackButton);
+    addFadeIn(startGameButton);
 
     const cells = document.querySelectorAll(".cells");
     const mark = document.querySelectorAll(".mark");
@@ -89,15 +138,17 @@ const startGame = (() => {
     
     startGameButton.addEventListener("click", () => {
        
-        startGameButton.style.display = "none";
-        
-        playerVersusPlayer.style.display = "block";
-        playerVersusAi.style.display = "block";
+        hide(startGameButton);
+        displayBlock(playerVersusPlayer);
+        displayBlock(playerVersusAi);
+        addFadeIn(playerVersusPlayer);
+        addFadeIn(playerVersusAi);
+
 
     })
     playerVersusPlayer.addEventListener('click', () => {
-        playerVersusPlayer.style.display = "none";
-        playerVersusAi.style.display = "none";
+        hide(playerVersusPlayer);
+        hide(playerVersusAi);
         GameBoard.playerVsPlayer = true;
         // container.style.display = "block";
         playGame(cells, mark, playerTurn);
@@ -107,16 +158,16 @@ const startGame = (() => {
     playerVersusAi.addEventListener('click', () => {
         const player = document.querySelector(".player");
         const goBackButton = document.querySelector(".go-back");
-        goBackButton.style.display = "block";
-        playerVersusPlayer.style.display = "none";
-        playerVersusAi.style.display = "none";
+        displayBlock(goBackButton);
+        displayBlock(container);
+        hide(playerVersusPlayer);
+        hide(playerVersusAi);
         GameBoard.playerVsAi = true;
-        container.style.display = "block";
-        container.classList.add("fade-in");
+        addFadeIn(container);
        // playGame(cells, mark, playerTurn);
         //set first text
         playGame(cells, mark, playerTurn);
-       
+        displayScoreAndName();
         player.textContent = "Make your best move with mark X!";
     })
  
@@ -133,28 +184,34 @@ const inputPlayerNames = () => {
     const labelTwo = document.querySelector(".label-name-two");
     const goBackButton = document.querySelector('.go-back');
     const player = document.querySelector('.player');
-    playerOneName.style.display = "block";
-    playerTwoName.style.display = "block";
-    submitButton.style.display = "block";
-    labelOne.style.display = "block"
-    labelTwo.style.display = "block";
+    displayBlock(playerOneName);
+    displayBlock(playerTwoName);
+    displayBlock(submitButton);
+    displayBlock(labelOne);
+    displayBlock(labelTwo);
+    addFadeIn(form);
    
 
     form.addEventListener('submit', (e) => {
+        const playerOneScore = document.querySelector(".player-one-score");
+        const playerTwoScore = document.querySelector(".player-two-score");
+        const personIcon = `<i class="bi bi-people-fill"></i>`;
         e.preventDefault();
         e.stopImmediatePropagation();
         playerOne.name = playerOneName.value;
         playerTwo.name = playerTwoName.value;
-        playerOneName.style.display = "none";
-        playerTwoName.style.display = "none";
-        submitButton.style.display = "none";
-        labelOne.style.display = "none";
-        labelTwo.style.display = "none";
-        container.style.display = "block";
-        container.classList.add("fade-in");
-        goBackButton.style.display = "block";
+        hide(playerOneName)
+        hide(playerTwoName)
+        hide(submitButton)
+        hide(labelOne)
+        hide(labelTwo)
+        displayBlock(container);
+        addFadeIn(container);
+        displayBlock(goBackButton);
         //set the first text
         player.textContent = `Player ${playerOne.name} turn with mark X!`;
+        playerOneScore.innerHTML = `<h3 class="player-one-score">${personIcon}${playerOne.name}: ${playerOne.score}</h3>`
+        playerTwoScore.innerHTML = `<h3 class="player-two-score">${personIcon}${playerTwo.name}: ${playerTwo.score}</h3>`
         form.reset();
         
     })
@@ -173,15 +230,15 @@ const GameBoard = {
 const displayWinner = (result) => {
     if(GameBoard.playerVsPlayer){
     if(playerOne.isWinner){
-        result.textContent = `Congatulations! Player ${playerOne.name} wins!`;
+        result.textContent = `Congratulations! Player ${playerOne.name} wins!`;
     } else if(playerTwo.isWinner){
-        result.textContent = `Congatulations! Player ${playerTwo.name} wins!`;
+        result.textContent = `Congratulations! Player ${playerTwo.name} wins!`;
     } else if(!playerOne.isWinner && !playerTwo.isWinner && GameBoard.itsTie){
         result.textContent = "It's a tie!";
     } 
 } else if(GameBoard.playerVsAi){
     if(playerOne.isWinner){
-        result.textContent = `Congatulations! You beat AI!`;
+        result.textContent = `Congratulations! You beat AI!`;
     } else if(playerTwo.isWinner){
         result.textContent = `AI wins!`;
     } else if(!playerOne.isWinner && !playerTwo.isWinner && GameBoard.itsTie){
@@ -191,8 +248,8 @@ const displayWinner = (result) => {
 }
 const displayRestartButton = () => {
     const restartButton = document.querySelector(".restart-button");
-    if(!!GameBoard.existsWinner || !!GameBoard.itsTie){
-        restartButton.style.visibility = "visible";
+    if(GameBoard.existsWinner || GameBoard.itsTie){
+        displayBlock(restartButton);
     }
     
 
@@ -205,125 +262,124 @@ const gameOver = (result) => {
     
     //upper horizontal
     if(cellPosition[0] === playerOne.marker && cellPosition[1] === playerOne.marker && cellPosition[2] === playerOne.marker){
-        console.log("X Wins");
         playerOne.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
-        
+        incrementAndDisplayScore();
     } 
     else if(cellPosition[0] === playerTwo.marker && cellPosition[1] === playerTwo.marker && cellPosition[2] === playerTwo.marker)
     {
-        console.log("O Wins");
         playerTwo.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     }  //vertical right
     else if(cellPosition[2] === playerOne.marker && cellPosition[5] === playerOne.marker && cellPosition[8] === playerOne.marker){
-        console.log("X Wins");
         playerOne.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } 
     else if(cellPosition[2] === playerTwo.marker && cellPosition[5] === playerTwo.marker && cellPosition[8] === playerTwo.marker)
     {
-        console.log("O Wins");
         playerTwo.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     }//down horizontal 
     else if(cellPosition[6] === playerOne.marker && cellPosition[7] === playerOne.marker && cellPosition[8] === playerOne.marker){
-        console.log("X Wins");
         playerOne.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } 
     else if(cellPosition[6] === playerTwo.marker && cellPosition[7] === playerTwo.marker && cellPosition[8] === playerTwo.marker)
     {
-        console.log("O Wins");
         playerTwo.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } //vertical left
     else if(cellPosition[0] === playerOne.marker && cellPosition[3] === playerOne.marker && cellPosition[6] === playerOne.marker){
-        console.log("X Wins");
         playerOne.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } 
     else if(cellPosition[0] === playerTwo.marker && cellPosition[3] === playerTwo.marker && cellPosition[6] === playerTwo.marker)
     {
-        console.log("O Wins");
         playerTwo.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } //middle
     else if(cellPosition[3] === playerOne.marker && cellPosition[4] === playerOne.marker && cellPosition[5] === playerOne.marker){
-        console.log("X Wins");
         playerOne.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } 
     else if(cellPosition[3] === playerTwo.marker && cellPosition[4] === playerTwo.marker && cellPosition[5] === playerTwo.marker)
     {
-        console.log("O Wins");
         playerTwo.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } //diag left to right
     else if(cellPosition[0] === playerOne.marker && cellPosition[4] === playerOne.marker && cellPosition[8] === playerOne.marker){
-        console.log("X Wins");
         playerOne.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } 
     else if(cellPosition[0] === playerTwo.marker && cellPosition[4] === playerTwo.marker && cellPosition[8] === playerTwo.marker)
     {
-        console.log("O Wins");
         playerTwo.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } //diag right to left
     else if(cellPosition[2] === playerOne.marker && cellPosition[4] === playerOne.marker && cellPosition[6] === playerOne.marker){
-        console.log("X Wins");
         playerOne.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } 
     else if(cellPosition[2] === playerTwo.marker && cellPosition[4] === playerTwo.marker && cellPosition[6] === playerTwo.marker)
     {
-        console.log("O Wins");
         playerTwo.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } //vertical middle
     else if(cellPosition[1] === playerOne.marker && cellPosition[4] === playerOne.marker && cellPosition[7] === playerOne.marker){
-        console.log("X Wins");
         playerOne.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     } 
     else if(cellPosition[1] === playerTwo.marker && cellPosition[4] === playerTwo.marker && cellPosition[7] === playerTwo.marker)
     {
-        console.log("O Wins");
         playerTwo.isWinner = true;
         GameBoard.existsWinner = true;
         displayWinner(result);
         displayRestartButton();
+        incrementAndDisplayScore();
     }
     else if(cellPosition[1] !== ""
     && cellPosition[2] !== "" && cellPosition[3] !== "" && cellPosition[4] !== ""
@@ -339,26 +395,14 @@ const restartGame = (cells, mark, playerTurn) => {
     const restartButton = document.querySelector(".restart-button");
     
     restartButton.addEventListener('click', () => {
-      
-        GameBoard.existsWinner = false;
-        GameBoard.itsTie = false;
-        GameBoard.gameBoard = ["", "", "", "", "", "", "", "", ""];
-        playerOne.isWinner = false;
-        playerTwo.isWinner = false;
-        restartButton.style.visibility = "hidden";
+        setGameToStart(cells, mark);
+        hide(restartButton);
         if(GameBoard.playerVsPlayer){
         playerTurn.textContent = `Player ${playerOne.name} turn with mark X!`;
         } else if(GameBoard.playerVsAi){
             playerTurn.textContent = `Make your best move with mark X!`;
+            displayScoreAndName();
         }
-        for(let i = 0 ; i < cells.length; i++){
-            mark[i].textContent = "";
-            mark[i].classList.remove("fade-in");
-            
-        }
-        GameBoard.countPlayerTurn = 1;
-        
-        
     })
 }
 const goBack = (cells, mark) => {
@@ -368,24 +412,19 @@ const goBack = (cells, mark) => {
         const container = document.querySelector('.container');
         const startGameButton = document.querySelector(".start-game");
 
-        container.style.display = "none";
-        startGameButton.style.display = "block";
-        goBackButton.style.display = "none";
-
-        GameBoard.existsWinner = false;
-        GameBoard.itsTie = false;
-        GameBoard.gameBoard = ["", "", "", "", "", "", "", "", ""];
-        playerOne.isWinner = false;
-        playerTwo.isWinner = false;
-        restartButton.style.visibility = "hidden";
-        for(let i = 0 ; i < cells.length; i++){
-            mark[i].textContent = "";
-            mark[i].classList.remove("fade-in")
-            
-        }
-        GameBoard.countPlayerTurn = 1;
+        hide(container);
+        displayBlock(startGameButton)
+        hide(goBackButton);
+        setGameToStart(cells, mark);
+        playerOne.score = 0;
+        playerTwo.score = 0;
         GameBoard.playerVsPlayer = false;
         GameBoard.playerVsAi = false;
+        displayScoreAndName();
+        
+        hide(restartButton);
+       
+       
      
         
     })
@@ -397,42 +436,36 @@ const playGame = (cells, mark, playerTurn) => {
     restartGame(cells, mark, playerTurn);
     for(let i = 0; i < cells.length; i++){
         let cell = cells[i];
-        
         cell.addEventListener('click', () => {
-            if(GameBoard.playerVsPlayer && !GameBoard.existsWinner && !GameBoard.playerVsAi){
+        if(GameBoard.playerVsPlayer && !GameBoard.existsWinner && !GameBoard.playerVsAi){
             if(GameBoard.countPlayerTurn % 2 !== 0 && GameBoard.gameBoard[i] === ""){
                 GameBoard.countPlayerTurn++;
                 playerTurn.textContent = `Player ${playerTwo.name} turn with mark O!`; //after click change text
                 mark[i].textContent = playerOne.marker; //mark with x
-                mark[i].classList.add("fade-in"); //add fade-in
+                addFadeIn(mark[i]);  //add fade-in
                 GameBoard.gameBoard[i] = playerOne.marker; //add x to the game flow
-                console.log(GameBoard.gameBoard);
                 gameOver(playerTurn); //check if the game is over
             } else if (GameBoard.countPlayerTurn % 2 === 0 && GameBoard.gameBoard[i] === ""){
                 GameBoard.countPlayerTurn++;
                 playerTurn.textContent = `Player ${playerOne.name} turn with mark X!`; //after click change text
                 mark[i].textContent = playerTwo.marker; //mark with O
-                mark[i].classList.add("fade-in"); //add fade-in
+                addFadeIn(mark[i]); //add fade-in
                 GameBoard.gameBoard[i] = playerTwo.marker; //add o to array
-                console.log(GameBoard.gameBoard);
                 gameOver(playerTurn); //check if the game is over
             } 
         } else if (!GameBoard.playerVsPlayer && !GameBoard.existsWinner && GameBoard.playerVsAi){
-            let random = Math.floor(Math.random() * 8) + 1;
             if(GameBoard.gameBoard[i] === ""){
-                mark[i].classList.add("fade-in");
+                addFadeIn(mark[i]);
                 mark[i].textContent = playerOne.marker;
                 GameBoard.gameBoard[i] = playerOne.marker
 
-                let emptyPosition = GameBoard.gameBoard.findIndex(x => x === ""); //find first empty spot
+                let emptyPosition = GameBoard.gameBoard.findIndex((x) => x === ""); //find first empty spot
                     if(emptyPosition !== -1 && !GameBoard.existsWinner){
-                    mark[emptyPosition].classList.add("fade-in");
+                    addFadeIn(mark[emptyPosition]);
                     mark[emptyPosition].textContent = playerTwo.marker;
-                    GameBoard.gameBoard[emptyPosition] = playerTwo.marker
+                    GameBoard.gameBoard[emptyPosition] = playerTwo.marker;
                 }
                 gameOver(playerTurn);
-               
-                
             }
                
            
@@ -440,32 +473,3 @@ const playGame = (cells, mark, playerTurn) => {
         })
 }
 } 
-
-
-
-//Next tasks
-//Verify in gameOver if the game is singlePlayer
-//Make the robot choose a place
-
-
-// else if(!GameBoard.existsWinner && GameBoard.playerVsAi && !GameBoard.playerVsPlayer){
-           
-        //     if(GameBoard.countPlayerTurn % 2 !== 0 && GameBoard.gameBoard[i] === ""){
-        //         GameBoard.countPlayerTurn++;
-        //         playerTurn.textContent = `Robot's turn with mark O!`;
-        //        //after click change text
-        //         mark[i].textContent = playerOne.marker; //mark with x
-        //         mark[i].classList.add("fade-in"); //add fade-in
-        //         GameBoard.gameBoard[i] = playerOne.marker; //add x to the game flow
-        //         console.log(GameBoard.gameBoard);
-        //         gameOver(playerTurn); //check if the game is over
-        //     } else if (GameBoard.countPlayerTurn % 2 === 0 && GameBoard.gameBoard[i] === ""){
-        //         GameBoard.countPlayerTurn++;
-        //         playerTurn.textContent = `Make your best move with mark X!`; //after click change text
-        //         mark[i].textContent = playerTwo.marker; //mark with O
-        //         mark[i].classList.add("fade-in"); //add fade-in
-        //         GameBoard.gameBoard[i] = playerTwo.marker; //add o to array
-        //         console.log(GameBoard.gameBoard);
-        //         gameOver(playerTurn); //check if the game is over
-        //     } 
-        // }

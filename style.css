@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: cursive;
+    font-family: system-ui;
     box-sizing:border-box;
 }
 html {
@@ -60,7 +60,6 @@ html {
     border: none;
     background-color: #d1d1d3;
     font-size: 20px;
-    visibility: hidden;
 }
 .go-back {
   padding: 10px 20px 10px 20px;
@@ -85,10 +84,11 @@ html {
   background-color: #ababab;
 }
 .start-game-container {
-    margin: 400px;
     display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
+    height: 100vh;
 }
 .player-player, .player-ai {
     padding: 10px 20px 10px 20px;
@@ -165,7 +165,7 @@ html {
     }
   }
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 620px) {
     .main {
       width: 300px;
       height: 300px;
@@ -177,12 +177,26 @@ html {
       grid-template-rows: 100px 100px 90px;
       grid-gap: 5px;
     }
+    .player-player, .player-ai {
+      padding: 10px 0px 10px 0px;
+     
+      font-size: 16px;
+  }
     .start-game-container {
       height: 100vh;
       margin: 0;
     }
     body{
       height: 100vh;
+    }
+    .restart-button, .go-back {
+    padding: 5px 10px 5px 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    background-color: #d1d1d3;
+    font-size: 17px;
     }
  
   }
@@ -214,6 +228,7 @@ html {
     text-align: initial;
     margin-bottom: 2px;
     font-size: 20px;
+    color:#d1d1d3;
   }
   input {
     outline: none;
@@ -225,3 +240,14 @@ html {
   .player-one-name, .player-two-name {
     padding: 5px;
   }
+
+  .score {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    color: #d1d1d3;
+}
+.bi {
+  margin-right: 5px;
+  margin-left: 5px;
+}
