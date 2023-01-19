@@ -4,6 +4,9 @@
     font-family: cursive;
     box-sizing:border-box;
 }
+html {
+  background-color: teal;
+}
 .container {
     margin-top: 20px;
     margin-left: auto;
@@ -11,11 +14,12 @@
 }
 .title {
     text-align: center;
+    color: #d1d1d3;
 }
 .main {
     width: 600px;
     height: 600px;
-    background-color: #494949;
+    background-color: #453C67;
     margin: 0 auto;
     margin-top: 40px;
     display: grid;
@@ -24,7 +28,7 @@
     grid-gap: 5px;
 }
 .cells {
-    background-color: #eeeef0;
+    background-color: #a09ceb;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -41,6 +45,7 @@
 .player {
     text-align: center;
     margin-top: 20px;
+    color: #d1d1d3;
 }
 .restart-container {
   display: flex;
@@ -197,13 +202,13 @@
   }
   .submit-names {
     margin-top: 60px;
-    padding: 5px 10px 5px 10px;
+    padding: 10px 15px 10px 15px;
     cursor: pointer;
     border-radius: 10px;
     outline: none;
     border: none;
     background-color: #d1d1d3;
-    font-size: 17px;
+    font-size: 18px;
   }
   .label-name-one, .label-name-two {
     text-align: initial;
@@ -215,6 +220,7 @@
     border-style: 1px solid #ababab;
     border-radius: 10px;
     font-size: 19px;
+    background-color: #babecb;
   }
   .player-one-name, .player-two-name {
     padding: 5px;

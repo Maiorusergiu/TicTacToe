@@ -112,6 +112,7 @@ const startGame = (() => {
         playerVersusAi.style.display = "none";
         GameBoard.playerVsAi = true;
         container.style.display = "block";
+        container.classList.add("fade-in");
        // playGame(cells, mark, playerTurn);
         //set first text
         playGame(cells, mark, playerTurn);
@@ -150,6 +151,7 @@ const inputPlayerNames = () => {
         labelOne.style.display = "none";
         labelTwo.style.display = "none";
         container.style.display = "block";
+        container.classList.add("fade-in");
         goBackButton.style.display = "block";
         //set the first text
         player.textContent = `Player ${playerOne.name} turn with mark X!`;
