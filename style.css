@@ -19,20 +19,23 @@ html {
 .main {
     width: 600px;
     height: 600px;
-    background-color: #453C67;
+    /* background-color: #453C67; */
     margin: 0 auto;
     margin-top: 40px;
     display: grid;
     grid-template-columns: 200px 200px 190px;
     grid-template-rows: 200px 200px 190px;
-    grid-gap: 5px;
+    
 }
+
+
 .cells {
     background-color: #a09ceb;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 1px solid #453C67;
 }
 .cells:hover {
     background-color: #d7d7da;
@@ -169,13 +172,12 @@ html {
     .main {
       width: 300px;
       height: 300px;
-      background-color: #494949;
       margin: 0 auto;
       margin-top: 40px;
       display: grid;
       grid-template-columns: 100px 100px 90px;
       grid-template-rows: 100px 100px 90px;
-      grid-gap: 5px;
+      
     }
     .player-player, .player-ai {
       padding: 10px 0px 10px 0px;
@@ -211,6 +213,19 @@ html {
       display: block;
       }
   }
+  @media screen and (max-height: 900px){
+    .main {
+    background-color: transparent;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 120px);
+    grid-template-rows: repeat(3, 120px);
+    justify-content: center;
+    }
+ 
+   }
   form {
     text-align: -webkit-center;
   }

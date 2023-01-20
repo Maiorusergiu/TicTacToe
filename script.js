@@ -257,7 +257,7 @@ const displayRestartButton = () => {
 
 
 
-const gameOver = (result) => {
+const checkForWinner = (result) => {
     const cellPosition = GameBoard.gameBoard;
     
     //upper horizontal
@@ -444,14 +444,14 @@ const playGame = (cells, mark, playerTurn) => {
                 mark[i].textContent = playerOne.marker; //mark with x
                 addFadeIn(mark[i]);  //add fade-in
                 GameBoard.gameBoard[i] = playerOne.marker; //add x to the game flow
-                gameOver(playerTurn); //check if the game is over
+                checkForWinner(playerTurn); //check if the game is over
             } else if (GameBoard.countPlayerTurn % 2 === 0 && GameBoard.gameBoard[i] === ""){
                 GameBoard.countPlayerTurn++;
                 playerTurn.textContent = `Player ${playerOne.name} turn with mark X!`; //after click change text
                 mark[i].textContent = playerTwo.marker; //mark with O
                 addFadeIn(mark[i]); //add fade-in
                 GameBoard.gameBoard[i] = playerTwo.marker; //add o to array
-                gameOver(playerTurn); //check if the game is over
+                checkForWinner(playerTurn); //check if the game is over
             } 
         } else if (!GameBoard.playerVsPlayer && !GameBoard.existsWinner && GameBoard.playerVsAi){
             if(GameBoard.gameBoard[i] === ""){
@@ -465,7 +465,7 @@ const playGame = (cells, mark, playerTurn) => {
                     mark[emptyPosition].textContent = playerTwo.marker;
                     GameBoard.gameBoard[emptyPosition] = playerTwo.marker;
                 }
-                gameOver(playerTurn);
+                checkForWinner(playerTurn);
             }
                
            
