@@ -7,6 +7,9 @@
 html {
   background-color: teal;
 }
+body {
+  overflow: hidden;
+}
 .container {
     margin-top: 20px;
     margin-left: auto;
@@ -87,7 +90,6 @@ html {
   background-color: #ababab;
 }
 .start-game-container {
-    display: flex;
     align-items: center;
     display: flex;
     justify-content: center;
