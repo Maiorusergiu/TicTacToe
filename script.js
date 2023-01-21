@@ -381,7 +381,7 @@ const checkForWinner = (result) => {
         displayRestartButton();
         incrementAndDisplayScore();
     }
-    else if(cellPosition[1] !== ""
+    else if(cellPosition[0] && cellPosition[1] !== ""
     && cellPosition[2] !== "" && cellPosition[3] !== "" && cellPosition[4] !== ""
     && cellPosition[5] !== "" && cellPosition[6] !== "" && cellPosition[7] !== ""
     && cellPosition[8] !== "" && !GameBoard.existsWinner){
@@ -454,20 +454,22 @@ const playGame = (cells, mark, playerTurn) => {
                 checkForWinner(playerTurn); //check if the game is over
             } 
         } else if (!GameBoard.playerVsPlayer && !GameBoard.existsWinner && GameBoard.playerVsAi){
+           
             if(GameBoard.gameBoard[i] === ""){
                 addFadeIn(mark[i]);
                 mark[i].textContent = playerOne.marker;
                 GameBoard.gameBoard[i] = playerOne.marker
-
+                checkForWinner(playerTurn);
                 let emptyPosition = GameBoard.gameBoard.findIndex((x) => x === ""); //find first empty spot
                     if(emptyPosition !== -1 && !GameBoard.existsWinner){
                     addFadeIn(mark[emptyPosition]);
                     mark[emptyPosition].textContent = playerTwo.marker;
                     GameBoard.gameBoard[emptyPosition] = playerTwo.marker;
+                    checkForWinner(playerTurn);
                 }
-                checkForWinner(playerTurn);
+                
             }
-               
+            
            
         }
         })
